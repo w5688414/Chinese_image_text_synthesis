@@ -1,29 +1,29 @@
 #coding=utf-8
-import os
-import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
 import codecs
-import is_chinese
+import os
+
+from data import is_chinese
+
 
 class wordsCodeConvert():
 
 
     def getSourceFile(self):
-        basePath=r'lyrics'
+        basePath=r'words'
         listPath=os.listdir(basePath)
         newpathlist=[]
         for path in listPath:
             newpath=os.path.join(basePath,path)
             newpathlist.append(newpath)
+        print(newpathlist)
         return newpathlist
 
     def convertWords(self,listPath):
         for path in listPath:
             print(path)
-            upath = unicode(path, 'utf-8')
-            f=codecs.open(upath,'r','gbk','ignore')
-            filepaths = path.split('/')
+
+            f=codecs.open(path,'r','gbk','ignore')
+            filepaths = path.split('\\')
             filename=filepaths[-1]
             print(filename)
 
@@ -36,8 +36,8 @@ class wordsCodeConvert():
                 output.write(newline)
                 output.write("\n")
 
-            f.close()
             output.close()
+            f.close()
 
 
 
