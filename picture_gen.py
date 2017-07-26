@@ -37,31 +37,43 @@ class ImageTextBoxFactory(object):
         # plt.figure('demo')
         # plt.imshow(im)
         # plt.show()
+
     def showResults(self):
         print(self.boxInfo)
 
-    def output(self):
-        with open("output/groundTruth/example.txt", "w") as file:
+    def output(self,index):
+        filename=str(index)+".txt"
+        path=os.path.join("output/groundTruth",filename)
+        with open(path, "w") as file:
             for dict in self.boxInfo:
                 lineText = "%s %s %s %s %s\n" % (
                 dict['startX'], dict['startY'], dict['endX'], dict['endY'], dict['text'])
                 file.write(lineText)
+    def clear(self):
+        self.boxInfo.clear()
+
 def main():
-    ITBF=ImageTextBoxFactory()
+
     textSource = TextSource(r'data\words/')
-    img = Image.new("RGB", (512, 512), "white")
-    img = img.resize((600, 400), Image.ANTIALIAS)
     textRegion = TextRegions()
     FS = FontState()
-    for i in range(0,20):
+    for i in range(0,1000):
+        ITBF = ImageTextBoxFactory()
+        img = Image.new("RGB", (512, 512), "white")
+        img = img.resize((600, 400), Image.ANTIALIAS)
+        generateData(FS, ITBF, img, textRegion, textSource,i)
+
+
+
+def generateData(FS, ITBF, img, textRegion, textSource,index):
+    for i in range(0, 20):
         word = textSource.sample_word()
         region_dict = textRegion.get_regions(img)
-        ITBF.add_text_to_image(region_dict, word, img,FS)
-    imgname = "example" + '.jpg'
+        ITBF.add_text_to_image(region_dict, word, img, FS)
+    imgname = str(index) + '.jpg'
     print(imgname)
     img.save(os.path.join('output/images', imgname))
-    ITBF.showResults()
-
+    ITBF.output(index)
 
 
 if __name__ == '__main__':
