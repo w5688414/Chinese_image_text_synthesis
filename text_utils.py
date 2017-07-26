@@ -3,6 +3,8 @@ import random
 import numpy as np
 import os
 
+from PIL import ImageFont
+
 
 class FontState(object):
     """
@@ -13,6 +15,16 @@ class FontState(object):
         # get the names of fonts to use:
         self.FONT_LIST = os.path.join(data_dir, 'fonts/fontlist.txt')
         self.fonts = [os.path.join(data_dir, 'fonts', f.strip()) for f in open(self.FONT_LIST)]
+        print(self.fonts)
+
+    '''
+     random generate a font
+    '''
+    def sample(self):
+        font=random.choice(self.fonts)
+        font=ImageFont.truetype(font, 20)
+        print(font.getname())
+        return font
 
 
 class TextSource(object):

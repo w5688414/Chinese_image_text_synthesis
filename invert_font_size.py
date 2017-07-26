@@ -13,3 +13,4 @@ for i in range(len(FS.fonts)):
     print(i)
     font = freetype.Font(FS.fonts[i], size=12)
     print(font.name)
+FS.sample()
