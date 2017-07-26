@@ -1,2 +1,3 @@
 # Chinese_image_text_synthesis
 experiments
+框架基本形成，后面用它来产生训练样例，用于ocr定位与识别
