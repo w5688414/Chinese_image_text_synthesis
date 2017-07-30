@@ -41,6 +41,28 @@ class ImageTextBoxFactory(object):
     def showResults(self):
         print(self.boxInfo)
 
+    def visualize_imaage(self,index):
+        imgname=str(index) + '.jpg'
+        txtname = str(index) + ".txt"
+        picPath =os.path.join( r"output\images",imgname)
+        txtPath = os.path.join(r"output\groundTruth",txtname)
+
+        img = Image.open(picPath)
+        im = np.array(img)
+        with open(txtPath, 'r') as txtfile:
+            for txt in txtfile.readlines():
+                txtArr = txt.split()
+                print(txtArr)
+                x1 = int(txtArr[0])
+                y1 = int(txtArr[1])
+                x2 = int(txtArr[2])
+                y2 = int(txtArr[3])
+                cv2.rectangle(im, (x1, y1), (x2, y2), (255, 0, 0))
+
+        plt.figure("example")
+        plt.imshow(im)
+        plt.show()
+
     def output(self,index):
         filename=str(index)+".txt"
         path=os.path.join("output/groundTruth",filename)
@@ -57,11 +79,14 @@ def main():
     textSource = TextSource(r'data\words/')
     textRegion = TextRegions()
     FS = FontState()
-    for i in range(0,1000):
+    maxNumImages=5
+    for i in range(0,maxNumImages):
         ITBF = ImageTextBoxFactory()
         img = Image.new("RGB", (512, 512), "white")
         img = img.resize((600, 400), Image.ANTIALIAS)
         generateData(FS, ITBF, img, textRegion, textSource,i)
+
+    print("total image number:%s" %(maxNumImages))
 
 
 
@@ -74,6 +99,7 @@ def generateData(FS, ITBF, img, textRegion, textSource,index):
     print(imgname)
     img.save(os.path.join('output/images', imgname))
     ITBF.output(index)
+    # ITBF.visualize_imaage(index)
 
 
 if __name__ == '__main__':
