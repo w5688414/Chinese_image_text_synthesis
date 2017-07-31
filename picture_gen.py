@@ -42,6 +42,11 @@ class ImageTextBoxFactory(object):
         print(self.boxInfo)
 
     def visualize_imaage(self,index):
+        '''
+        visualize the image
+        :param index:
+        :return:
+        '''
         imgname=str(index) + '.jpg'
         txtname = str(index) + ".txt"
         picPath =os.path.join( r"output\images",imgname)
@@ -64,14 +69,32 @@ class ImageTextBoxFactory(object):
         plt.show()
 
     def output(self,index):
+        '''
+        output the  coordinate of objects in this picture
+        :param index:
+        :return:
+        '''
         filename=str(index)+".txt"
+        imgname=str(index)+".jpg"
         path=os.path.join("output/groundTruth",filename)
         with open(path, "w") as file:
             for dict in self.boxInfo:
-                lineText = "%s %s %s %s %s\n" % (
-                dict['startX'], dict['startY'], dict['endX'], dict['endY'], dict['text'])
-                file.write(lineText)
+                # uncomment the line below if you want the VOC2007 groundtruth format
+                VOC2007LineText="%s %s %s %s %s %s\n" % (imgname, dict['text'],
+                dict['startX'], dict['startY'], dict['endX'], dict['endY'])
+                file.write(VOC2007LineText)
+
+                #uncomment the line below if you want the ICDAR groundtruth format
+                # ICDARLineText = "%s %s %s %s %s\n" % (
+                # dict['startX'], dict['startY'], dict['endX'], dict['endY'], dict['text'])
+                # file.write(ICDARLineText)
+
+
     def clear(self):
+        '''
+        clear the old data
+        :return:
+        '''
         self.boxInfo.clear()
 
 def main():
