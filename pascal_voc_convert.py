@@ -4,18 +4,14 @@ import xml.etree.ElementTree as ET
 import numpy as np
 from xml.dom.minidom import Document
 
+from PIL import Image
+
+
 class formatConverter(object):
 
 
 
     def convert_voc(self,input_path,output_path):
-        all_imgs = []
-
-        classes_count = {}
-
-        class_mapping = {}
-
-        visualise = False
 
         if os.path.exists(output_path)==False:
             print("% not exists" %(output_path))
@@ -44,15 +40,17 @@ class formatConverter(object):
         with open(imgsets_path_test,'w') as f:
             for imagefile in listimages:
                 f.write(imagefile + "\n")
+
         input_groundtruth_path=os.path.join(input_path,'groundTruth')
         groundTruths=os.listdir(input_groundtruth_path)
         for singleGround in groundTruths:
             txt_file_path=os.path.join(input_groundtruth_path,singleGround)
+            print(txt_file_path)
             with open(txt_file_path) as f:
                 files=f.readlines()
-                self.write_to_xml(files,annot_path)
+                self.write_to_xml(files,annot_path,input_img_path)
 
-    def write_to_xml(self,files, annot_path):
+    def write_to_xml(self,files, annot_path,input_img_path):
         # 创建dom文档
         doc = Document()
         # 创建根节点
@@ -65,6 +63,7 @@ class formatConverter(object):
         folder.appendChild(folder_text)
         folder.appendChild(folder_text)
         annotation.appendChild(folder)
+
 
         flag=True
         imgfilename=''
@@ -83,6 +82,20 @@ class formatConverter(object):
             name_text=doc.createTextNode(arrayFile[1])
             name.appendChild(name_text)
             object.appendChild(name)
+            # the source part
+            source = doc.createElement("source")
+            annotation_v1 = doc.createElement("annotation")
+            database = doc.createElement("database")
+            image_v1 = doc.createElement("image")
+
+            annotation_v1.appendChild(doc.createTextNode("VOC2007"))
+            database.appendChild(doc.createTextNode("My Database"))
+            image_v1.appendChild(doc.createTextNode("flickr"))
+
+            source.appendChild(annotation_v1)
+            source.appendChild(database)
+            source.appendChild(image_v1)
+            annotation.appendChild(source)
 
             bndbox=doc.createElement("bndbox")
             xmin=doc.createElement("xmin")
@@ -107,6 +120,23 @@ class formatConverter(object):
 
             object.appendChild(bndbox)
             annotation.appendChild(object)
+        input_img_file_path=os.path.join(input_img_path,arrayFile[0])
+        img = Image.open('output/images/0.jpg')
+        width,height=img.size
+
+        sizeimage=doc.createElement("size")
+        imagewidth=doc.createElement("width")
+        imageheight=doc.createElement("height")
+        imagedepth=doc.createElement("depth")
+        imagewidth.appendChild(doc.createTextNode(str(width)))
+        imageheight.appendChild(doc.createTextNode(str(height)))
+        if img.mode=="RGB":
+            imagedepth.appendChild(doc.createTextNode(str(3)))
+        sizeimage.appendChild(imagedepth)
+        sizeimage.appendChild(imagewidth)
+        sizeimage.appendChild(imageheight)
+
+        annotation.appendChild(sizeimage)
         # 将dom对象写入本地xml文件
         xmlfilename=imgfilename.split(".")[0]+".xml"
         xmlfilePath=os.path.join(annot_path,xmlfilename)
