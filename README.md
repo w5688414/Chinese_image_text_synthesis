@@ -10,3 +10,8 @@ experiments
     groundtruth为图片文字的位置信息
 
     images为生成的图片
+
+# environments
+- python 3.6
+- windows 10 system
+ as for other platforms, I haven't tested the porgram yet
