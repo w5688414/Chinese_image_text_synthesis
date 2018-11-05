@@ -76,7 +76,10 @@ class ImageTextBoxFactory(object):
         '''
         filename=str(index)+".txt"
         imgname=str(index)+".jpg"
-        path=os.path.join("output/groundTruth",filename)
+        output_txt_path="output/groundTruth"
+        if(not os.path.exists(output_txt_path)):
+            os.makedirs(output_txt_path)
+        path=os.path.join(output_txt_path,filename)
         with open(path, "w") as file:
             for dict in self.boxInfo:
                 # uncomment the line below if you want the VOC2007 groundtruth format
@@ -99,10 +102,10 @@ class ImageTextBoxFactory(object):
 
 def main():
 
-    textSource = TextSource(r'data\words/')
+    textSource = TextSource(r'data/words/')
     textRegion = TextRegions()
     FS = FontState()
-    maxNumImages=5
+    maxNumImages=10
     for i in range(0,maxNumImages):
         ITBF = ImageTextBoxFactory()
         img = Image.new("RGB", (512, 512), "white")
@@ -120,7 +123,10 @@ def generateData(FS, ITBF, img, textRegion, textSource,index):
         ITBF.add_text_to_image(region_dict, word, img, FS)
     imgname = str(index) + '.jpg'
     print(imgname)
-    img.save(os.path.join('output/images', imgname))
+    output_path='output/images'
+    if(not os.path.exists(output_path)):
+        os.makedirs(output_path)
+    img.save(os.path.join(output_path, imgname))
     ITBF.output(index)
     # ITBF.visualize_imaage(index)
 

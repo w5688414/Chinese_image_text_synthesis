@@ -1,4 +1,3 @@
-STLiti.TTF
 FangSong_GB2312.ttf
 KaiTi_GB2312.ttf
 Microsoft YaHei.ttf

@@ -30,15 +30,21 @@ class FontState(object):
 class TextSource(object):
     """
         Provides text for words, paragraphs, sentences.
-        """
+    """
 
     def __init__(self, fn):
         files = os.listdir(fn)
-        files = files[0:-1]
-        random.shuffle(files)
+        # print(files)
+        # files = files[0:-1]
+        valid_files=[]
+        for file in files:
+            if(file.split('.')[-1]=='txt'):
+                valid_files.append(file)
+        random.shuffle(valid_files)
         filecnt = 10
-        self.txt = []
-        for filename in files:
+        print(valid_files)
+        self.txt=[]
+        for filename in valid_files:
             filecnt -= 1
             if filecnt == 0:
                 break
@@ -47,8 +53,9 @@ class TextSource(object):
             with open(fc, 'r') as f:
                 for l in f.readlines():
                     line = l.strip()
-                    # print line
+                    # print(line)
                     self.txt.append(line)
+
         random.shuffle(self.txt)
         print(len(self.txt))
 
@@ -71,5 +78,5 @@ class TextSource(object):
         return rand_word
 
 if __name__ == '__main__':
-    textSource=TextSource(r'data\words/')
+    textSource=TextSource(r'data/words/')
     textSource.sample_word()
