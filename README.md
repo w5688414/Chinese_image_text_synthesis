@@ -11,7 +11,23 @@ experiments
 
     images为生成的图片
 
+## usage
+
+for image generation
+
+```
+pyhon3 picture_gen.py
+```
+
+convert data format to voc2007 data format
+
+```
+python3 pascal_voc_convert.py
+```
+
 # environments
-- python 3.6
-- windows 10 system
- as for other platforms, I haven't tested the porgram yet
+- python 3.7
+- mac system
+- Pillow   5.3.0
+- opencv 3.4
+
